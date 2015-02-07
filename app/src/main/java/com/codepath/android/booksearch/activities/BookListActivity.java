@@ -53,7 +53,7 @@ public class BookListActivity extends ActionBarActivity {
                         final ArrayList<Book> books = Book.fromJson(docs);
                         // Load model objects into the adapter
                         for (Book book : books) {
-                            bookAdapter.add(book); // add movie through the adapter
+                            bookAdapter.add(book); // add book through the adapter
                         }
                         bookAdapter.notifyDataSetChanged();
                     }
