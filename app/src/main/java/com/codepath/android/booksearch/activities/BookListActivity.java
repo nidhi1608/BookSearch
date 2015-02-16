@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,9 +37,6 @@ public class BookListActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
-        // Get the support ToolBar
-        final Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         lvBooks = (ListView) findViewById(R.id.lvBooks);
         ArrayList<Book> aBooks = new ArrayList<Book>();
         // initialize the adapter
@@ -117,6 +113,7 @@ public class BookListActivity extends ActionBarActivity {
                 searchView.clearFocus();
                 searchView.setQuery("", false);
                 searchView.setIconified(true);
+                searchItem.collapseActionView();
                 // Set activity title to search query
                 BookListActivity.this.setTitle(query);
                 return true;
