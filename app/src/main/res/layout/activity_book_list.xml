@@ -2,10 +2,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BookSearchActivity">
+    tools:context=".activities.BookListActivity">
+
+    <EditText
+        android:id="@+id/query"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Enter a book name..."
+        android:inputType="textPersonName"
+        android:padding="10dp" />
 
     <ListView
         android:id="@+id/lvBooks"
+        android:layout_below="@id/query"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

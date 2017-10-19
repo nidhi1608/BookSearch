@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.codepath.android.booksearch.R;
 import com.codepath.android.booksearch.adapters.BookAdapter;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 public class BookListActivity extends ActionBarActivity {
     private ListView lvBooks;
     private BookAdapter bookAdapter;
+    private EditText query;
     private BookClient client;
 
     @Override
@@ -32,6 +35,7 @@ public class BookListActivity extends ActionBarActivity {
         lvBooks = (ListView) findViewById(R.id.lvBooks);
         ArrayList<Book> aBooks = new ArrayList<Book>();
         bookAdapter = new BookAdapter(this, aBooks);
+        query = (EditText) findViewById(R.id.query);
         lvBooks.setAdapter(bookAdapter);
         // Fetch the data remotely
         fetchBooks();
@@ -41,28 +45,34 @@ public class BookListActivity extends ActionBarActivity {
     // Converts them into an array of book objects and adds them to the adapter
     private void fetchBooks() {
         client = new BookClient();
-        client.getBooks("oscar Wilde", new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-                    JSONArray docs = null;
-                    if(response != null) {
-                        // Get the docs json array
-                        docs = response.getJSONArray("docs");
-                        // Parse json array into array of model objects
-                        final ArrayList<Book> books = Book.fromJson(docs);
-                        // Load model objects into the adapter
-                        for (Book book : books) {
-                            bookAdapter.add(book); // add book through the adapter
+
+        if(!query.getText().toString().isEmpty()) {
+
+            client.getBooks(query.getText().toString(), new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    try {
+                        JSONArray docs = null;
+                        if (response != null) {
+                            // Get the docs json array
+                            docs = response.getJSONArray("docs");
+                            // Parse json array into array of model objects
+                            final ArrayList<Book> books = Book.fromJson(docs);
+                            // Load model objects into the adapter
+                            for (Book book : books) {
+                                bookAdapter.add(book); // add book through the adapter
+                            }
+                            bookAdapter.notifyDataSetChanged();
                         }
-                        bookAdapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        // Invalid JSON format, show appropriate error.
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    // Invalid JSON format, show appropriate error.
-                    e.printStackTrace();
                 }
-            }
-        });
+            });
+        } else {
+            Toast.makeText(getApplicationContext(), "Query cannot be empty.", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
